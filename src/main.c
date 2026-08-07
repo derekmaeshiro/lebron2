@@ -4,6 +4,7 @@
 #include "../external/stm32f4xx.h"
 #include "../external/stm32f446xx.h"
 
+// cppcheck-suppress unusedFunction
 void SystemInit(void) {
     // Need for compiling
 }
