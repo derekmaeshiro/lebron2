@@ -77,6 +77,6 @@ size: $(TARGET_ELF)
 
 # 4. Run static analysis using cppcheck
 static:
-	cppcheck --enable=all --suppress=missingIncludeSystem --suppress=*:external/* --error-exitcode=1 -I./src -I./external -I./ src/
+	cppcheck --inline-suppr --enable=all --suppress=missingIncludeSystem --suppress=*:external/* --error-exitcode=1 -I./src -I./external -I./ src/
 clean:
 	rm -rf build/
