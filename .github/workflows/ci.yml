@@ -1,0 +1,25 @@
+name: STM32 Continuous Integration
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+
+    # Specify the Docker image pushed to Docker Hub
+    container:
+      image: <your-dockerhub-username>/stm32f4-armgcc:latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build STM32 Firmware
+        run: make all
+
+      - name: Run Static Analysis
+        run: make static
