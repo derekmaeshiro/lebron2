@@ -12,7 +12,7 @@ jobs:
 
     # Specify the Docker image pushed to Docker Hub
     container:
-      image: <your-dockerhub-username>/stm32f4-armgcc:latest
+      image: derekmaeshiro/stm32f4-armgcc:latest
 
     steps:
       - name: Checkout Code
