@@ -1,6 +1,7 @@
 # --- Environment Setup ---
-ARM_DIR = ${ARM_DIRECTORY}
-OPEN_OCD_DIR = ${TOOLS_OPEN_OCD_DIR_PATH}
+# Using ?= allows these to be overridden by environment variables (useful for CI/Docker)
+ARM_DIR ?= ${ARM_DIRECTORY}
+OPEN_OCD_DIR ?= ${TOOLS_OPEN_OCD_DIR_PATH}
 
 # --- Toolchain Paths ---
 ARM_BIN_DIR = $(ARM_DIR)/bin
@@ -26,7 +27,7 @@ TARGET_BIN = $(BIN_DIR)/$(TARGET_NAME).bin
 # Core application sources
 SOURCES = \
     src/main.c \
-	src/startup_stm32f446retx.o \
+    src/startup_stm32f446retx.o \
     
 # Automatically swap .c extensions for .o pathing inside the build tree
 OBJECTS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SOURCES))
@@ -49,7 +50,7 @@ LINKER_SCRIPT = src/STM32F446RETX_FLASH.ld
 LDFLAGS   = $(MCU_FLAGS) --specs=nosys.specs -T$(LINKER_SCRIPT)
 
 # --- Build Rules ---
-.PHONY: all clean flash size
+.PHONY: all clean flash size static
 
 all: $(TARGET_BIN) size
 
@@ -74,5 +75,8 @@ flash: $(TARGET_BIN)
 size: $(TARGET_ELF)
 	@$(SIZE) $(TARGET_ELF)
 
+# 4. Run static analysis using cppcheck
+static:
+	cppcheck --inline-suppr --enable=all --suppress=missingIncludeSystem --suppress=*:external/* --suppress=toomanyconfigs --error-exitcode=1 -I./src -I./external -I./ src/
 clean:
 	rm -rf build/
